@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thử thách Toán 10 - Các phép toán vectơ</title>
+<script>
+window.MathJax = {tex:{inlineMath:[['$','$'],['\\(','\\)']]}, options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']}};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap');
+:root{--primary:#2563EB;--primary-dark:#1D4ED8;--success:#10B981;--danger:#EF4444;--bg:#F0F9FF;--ink:#1F2937;--muted:#6B7280}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Be Vietnam Pro',Arial,sans-serif}
+body{min-height:100vh;padding:16px;background:radial-gradient(#bae6fd 1px,transparent 1px) 0 0/20px 20px,var(--bg);display:flex;align-items:center;justify-content:center;color:var(--ink)}
+.app{width:100%;max-width:650px;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 14px 40px #2563eb24}
+.top{padding:17px 24px;background:linear-gradient(120deg,#1d4ed8,#2563eb,#0891b2);color:#fff;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.top b{font-size:15px;letter-spacing:.3px}.top span{font-size:13px;opacity:.9}
+.screen{display:none;padding:30px 28px;animation:fade .3s ease}.screen.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.title{text-align:center;color:var(--primary);font-size:1.42rem;font-weight:800;margin-bottom:7px;text-transform:uppercase}
+.subtitle{text-align:center;color:var(--muted);font-weight:600;margin-bottom:22px;line-height:1.55}
+.instructions{background:#eff6ff;border-left:4px solid var(--primary);padding:15px;border-radius:10px;margin-bottom:22px;font-size:.91rem;line-height:1.7}
+.input-group{margin-bottom:14px}.input-group label{display:block;margin-bottom:7px;font-weight:700;font-size:.9rem;color:var(--primary-dark)}
+.input-group input{width:100%;padding:13px;border:2px solid #e5e7eb;border-radius:11px;font-size:1rem;outline:none;background:#f9fafb}
+.input-group input:focus{border-color:var(--primary);background:white}
+.btn{border:0;border-radius:12px;padding:14px 17px;font-size:1rem;font-weight:700;cursor:pointer;transition:.2s}
+.btn:disabled{opacity:.45;cursor:not-allowed}.primary{background:var(--primary);color:white;box-shadow:0 4px 12px #2563eb35}.primary:hover{background:var(--primary-dark);transform:translateY(-1px)}
+.success{background:var(--success);color:white}.danger{background:var(--danger);color:white}.outline{background:white;border:2px solid var(--primary);color:var(--primary)}
+.full{width:100%;margin-top:10px}
+.quiz-head{display:flex;justify-content:space-between;color:var(--primary);font-weight:800;margin-bottom:13px}
+.progress{height:8px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin-bottom:23px}.progress-fill{height:100%;width:0;background:var(--success);transition:width .3s}
+.question{font-size:1.13rem;font-weight:600;line-height:1.8;min-height:145px;color:#111827;margin-bottom:18px}
+.answers{display:flex;gap:12px}.answers button{flex:1}
+.feedback{display:none;padding:15px;border-radius:12px;margin:18px 0;line-height:1.65;font-size:.94rem}
+.feedback.show{display:block}.feedback.correct{background:#d1fae5;border:2px solid #34d399}.feedback.incorrect{background:#fee2e2;border:2px solid #f87171}
+.feedback-title{font-weight:800;margin-bottom:7px;font-size:1.05rem}
+.result-circle{width:126px;height:126px;border-radius:50%;border:8px solid var(--primary);display:flex;align-items:center;justify-content:center;font-size:2.1rem;font-weight:800;margin:5px auto 20px;color:var(--primary)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}.stat{background:#f9fafb;padding:14px;border-radius:12px;text-align:center;border:1px solid #e5e7eb;font-weight:600}.stat span{display:block;font-size:1.5rem;font-weight:800;margin-top:4px}
+.good{color:var(--success)}.bad{color:var(--danger)}.message{text-align:center;line-height:1.6;margin-bottom:17px;font-weight:600}
+.summary{background:#fef3c7;color:#92400e;padding:14px;border-radius:12px;font-weight:700;text-align:center;margin-bottom:17px;font-size:.85rem;line-height:1.6;border:2px dashed #f59e0b;overflow-wrap:anywhere}
+.footer{padding:13px 20px;border-top:1px solid #e5e7eb;color:#94a3b8;font-size:12px;text-align:center}
+@media(max-width:480px){.screen{padding:24px 19px}.answers{gap:9px}.btn{font-size:.93rem;padding:13px 10px}.question{font-size:1.03rem}}
+@media print{body{background:white}.top,.footer,.btn{display:none!important}.app{box-shadow:none}.screen{display:none!important}#screen-3{display:block!important}}
+</style>
+</head>
+<body>
+<div class="app" id="capture-area">
+  <div class="top"><b>THỬ THÁCH KIẾN THỨC TOÁN HỌC</b><span id="top-label">TOÁN 10</span></div>
+  <section id="screen-1" class="screen active">
+    <div class="title">THỬ THÁCH TOÁN 10</div>
+    <div class="subtitle">Chủ đề: <b>CÁC PHÉP TOÁN VECTƠ</b><br>Tổng và hiệu hai vectơ • Tích của vectơ với một số</div>
+    <div class="instructions"><b>🎯 Hướng dẫn tham gia</b><br>
+      - Bài thử thách gồm <b>10 nhận định</b> về các phép toán vectơ.<br>
+      - Đọc kỹ từng nhận định và chọn <b>ĐÚNG</b> hoặc <b>SAI</b>.<br>
+      - Sau mỗi câu, hệ thống hiển thị đáp án và giải thích để em tự kiểm tra kiến thức.<br>
+      - Hoàn thành bài làm để xem điểm số và kết quả của mình.
+    </div>
+    <div class="input-group"><label>Họ và tên của em:</label><input id="student-name" type="text" placeholder="Ví dụ: Nguyễn Văn A" autocomplete="off"></div>
+    <div class="input-group"><label>Lớp học:</label><input id="student-class" type="text" placeholder="Ví dụ: 10A1" autocomplete="off"></div>
+    <button class="btn primary full" onclick="startQuiz()">BẮT ĐẦU THỬ THÁCH 🚀</button>
+  </section>
+  <section id="screen-2" class="screen">
+    <div class="quiz-head"><span id="question-counter">Câu 1/10</span><span id="score-tracker">Điểm: 0</span></div>
+    <div class="progress"><div class="progress-fill" id="progress-bar"></div></div>
+    <div class="question" id="question-text"></div>
+    <div class="answers"><button class="btn success" id="btn-true" onclick="checkAnswer(true)">ĐÚNG</button><button class="btn danger" id="btn-false" onclick="checkAnswer(false)">SAI</button></div>
+    <div class="feedback" id="feedback-box"><div class="feedback-title" id="feedback-title"></div><div id="feedback-desc"></div></div>
+    <button class="btn primary full" id="btn-next" style="display:none" onclick="nextQuestion()">TIẾP TỤC ➜</button>
+  </section>
+  <section id="screen-3" class="screen">
+    <div class="title" id="rank-title">HOÀN THÀNH!</div><div class="subtitle">Kết quả thử thách: Các phép toán vectơ</div>
+    <div class="result-circle" id="final-score">0/10</div>
+    <div class="stats"><div class="stat">Tỉ lệ đúng<span class="good" id="final-percent">0%</span></div><div class="stat">Số câu sai<span class="bad" id="final-wrong">0</span></div></div>
+    <div class="message" id="personal-message"></div>
+    <div class="summary" id="summary-string"></div>
+    <button class="btn primary full" onclick="captureResult()">📸 CHỤP ẢNH KẾT QUẢ</button>
+    <button class="btn outline full" onclick="retryQuiz()">🔄 LÀM LẠI BÀI</button>
+  </section>
+  <div class="footer">TOÁN 10 • HỌC TẬP CHỦ ĐỘNG • CÙNG CHINH PHỤC THẾ GIỚI VECTƠ</div>
+</div>
+<script>
+const questions = [{"text": "Với ba điểm bất kỳ $A,B,C$, ta luôn có quy tắc ba điểm: $\\overrightarrow{AB}+\\overrightarrow{BC}=\\overrightarrow{AC}$.", "isTrue": true, "explanation": "Chính xác. Khi ghép điểm cuối của vectơ thứ nhất với điểm đầu của vectơ thứ hai, vectơ tổng đi từ điểm đầu của vectơ thứ nhất đến điểm cuối của vectơ thứ hai. Đây là quy tắc ba điểm để tính tổng hai vectơ."}, {"text": "Với hai vectơ $\\vec a,\\vec b$, hiệu $\\vec a-\\vec b$ được xác định bởi $\\vec a-\\vec b=\\vec a+\\vec b$.", "isTrue": false, "explanation": "Chưa đúng. Hiệu hai vectơ được định nghĩa là tổng của vectơ thứ nhất với vectơ đối của vectơ thứ hai: $\\boxed{\\vec a-\\vec b=\\vec a+(-\\vec b)}$. Không được bỏ dấu đối của $\\vec b$."}, {"text": "Với mọi điểm $A,B,C$, ta có $\\overrightarrow{AB}-\\overrightarrow{AC}=\\overrightarrow{CB}$.", "isTrue": true, "explanation": "Đúng. Ta có $\\overrightarrow{AB}-\\overrightarrow{AC}=\\overrightarrow{AB}+\\overrightarrow{CA}$. Theo quy tắc ba điểm, $\\overrightarrow{CA}+\\overrightarrow{AB}=\\overrightarrow{CB}$; phép cộng vectơ có tính giao hoán nên kết quả là $\\overrightarrow{CB}$."}, {"text": "Nếu $ABCD$ là hình bình hành thì $\\overrightarrow{AB}+\\overrightarrow{AD}=\\overrightarrow{AC}$.", "isTrue": true, "explanation": "Chính xác. Theo quy tắc hình bình hành, tổng hai vectơ có chung điểm đầu $A$ và là hai cạnh kề của hình bình hành chính là vectơ đường chéo xuất phát từ $A$: $\\overrightarrow{AB}+\\overrightarrow{AD}=\\overrightarrow{AC}$."}, {"text": "Nếu $M$ là trung điểm của đoạn thẳng $AB$ thì với mọi điểm $O$, ta có $\\overrightarrow{OM}=\\overrightarrow{OA}+\\overrightarrow{OB}$.", "isTrue": false, "explanation": "Sai vì thiếu hệ số $\\dfrac12$. Công thức đúng là $\\boxed{\\overrightarrow{OM}=\\dfrac12\\left(\\overrightarrow{OA}+\\overrightarrow{OB}\\right)}$. Đây là hệ thức vectơ đặc trưng của trung điểm."}, {"text": "Với số thực $k>0$, vectơ $k\\vec a$ cùng hướng với vectơ $\\vec a$ và có độ dài bằng $k|\\vec a|$.", "isTrue": true, "explanation": "Đúng. Khi nhân vectơ $\\vec a$ với số thực $k>0$, ta được vectơ cùng hướng với $\\vec a$ và có độ dài $|k\\vec a|=k|\\vec a|$."}, {"text": "Nếu $k<0$ thì vectơ $k\\vec a$ ngược hướng với vectơ $\\vec a$ và có độ dài bằng $|k|\\,|\\vec a|$ (với $\\vec a\\ne\\vec 0$).", "isTrue": true, "explanation": "Chính xác. Hệ số âm làm đổi hướng vectơ; độ dài luôn không âm và được tính bởi $|k\\vec a|=|k|\\,|\\vec a|$."}, {"text": "Với mọi vectơ $\\vec a$ và hai số thực $m,n$, ta có $(m+n)\\vec a=m\\vec a+n\\vec a$.", "isTrue": true, "explanation": "Đúng. Đây là tính chất phân phối của phép nhân vectơ với một số đối với phép cộng các số thực. Ngoài ra còn có $m(\\vec a+\\vec b)=m\\vec a+m\\vec b$."}, {"text": "Nếu $G$ là trọng tâm tam giác $ABC$ thì $\\overrightarrow{GA}+\\overrightarrow{GB}+\\overrightarrow{GC}=\\vec 0$.", "isTrue": true, "explanation": "Chính xác. Đây là tính chất vectơ đặc trưng của trọng tâm tam giác. Tương đương, với mọi điểm $O$, ta có $\\overrightarrow{OG}=\\dfrac13(\\overrightarrow{OA}+\\overrightarrow{OB}+\\overrightarrow{OC})$."}, {"text": "Hai lực được biểu diễn bởi hai vectơ $\\vec F_1,\\vec F_2$ cùng tác dụng tại một điểm có hợp lực được biểu diễn bởi vectơ $\\vec F=\\vec F_1-\\vec F_2$ trong mọi trường hợp.", "isTrue": false, "explanation": "Sai. Hợp lực của hai lực đồng quy được biểu diễn bởi tổng vectơ $\\boxed{\\vec F=\\vec F_1+\\vec F_2}$. Phép trừ chỉ phù hợp khi bài toán yêu cầu hiệu hai vectơ hoặc khi một lực đã được biểu diễn bằng vectơ đối."}];
+let currentQ=0,score=0,sName='',sClass='',answered=false;
+function switchScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function typeset(el){if(window.MathJax&&MathJax.typesetPromise){MathJax.typesetClear([el]);MathJax.typesetPromise([el]);}}
+function startQuiz(){
+ sName=document.getElementById('student-name').value.trim();sClass=document.getElementById('student-class').value.trim();
+ if(!sName||!sClass){alert('Em vui lòng nhập đầy đủ họ tên và lớp nhé!');return}
+ currentQ=0;score=0;switchScreen('screen-2');loadQuestion();
+}
+function loadQuestion(){
+ answered=false;const q=questions[currentQ];
+ document.getElementById('question-counter').textContent=`Câu ${currentQ+1}/${questions.length}`;
+ document.getElementById('score-tracker').textContent=`Điểm: ${score}`;
+ document.getElementById('progress-bar').style.width=`${currentQ/questions.length*100}%`;
+ const qe=document.getElementById('question-text');qe.innerHTML=q.text;typeset(qe);
+ document.getElementById('feedback-box').className='feedback';
+ document.getElementById('btn-next').style.display='none';
+ document.getElementById('btn-true').disabled=false;document.getElementById('btn-false').disabled=false;
+}
+function checkAnswer(choice){
+ if(answered)return;answered=true;const q=questions[currentQ],correct=choice===q.isTrue;if(correct)score++;
+ document.getElementById('score-tracker').textContent=`Điểm: ${score}`;
+ document.getElementById('btn-true').disabled=true;document.getElementById('btn-false').disabled=true;
+ const fb=document.getElementById('feedback-box');fb.className='feedback show '+(correct?'correct':'incorrect');
+ document.getElementById('feedback-title').textContent=correct?'🎉 CHÍNH XÁC! Em đã hiểu kiến thức.':'💡 CHƯA CHÍNH XÁC! Hãy đọc lời giải thích.';
+ const desc=document.getElementById('feedback-desc');desc.innerHTML=`<b>Đáp án: ${q.isTrue?'ĐÚNG':'SAI'}.</b><br>${q.explanation}`;typeset(fb);
+ const next=document.getElementById('btn-next');next.textContent=currentQ===questions.length-1?'XEM KẾT QUẢ ➜':'TIẾP TỤC ➜';next.style.display='block';
+}
+function nextQuestion(){currentQ++;if(currentQ<questions.length)loadQuestion();else showSummary()}
+function showSummary(){
+ switchScreen('screen-3');document.getElementById('progress-bar').style.width='100%';
+ const percent=Math.round(score/questions.length*100),wrong=questions.length-score;
+ let rank,color,message;
+ if(score>=9){rank='XUẤT SẮC';color='#059669';message='Tuyệt vời! Em đã nắm rất vững các phép toán vectơ. Hãy tiếp tục phát huy nhé!'}
+ else if(score>=7){rank='RẤT TỐT';color='#2563eb';message='Em làm rất tốt! Hãy xem lại một vài tính chất và công thức để củng cố kiến thức.'}
+ else if(score>=5){rank='CẦN CỐ GẮNG';color='#d97706';message='Em đã có nền tảng ban đầu. Hãy ôn lại quy tắc cộng, trừ vectơ và phép nhân vectơ với một số rồi thử lại nhé!'}
+ else{rank='CẦN ÔN TẬP THÊM';color='#dc2626';message='Đừng nản chí! Em hãy xem lại định nghĩa, quy tắc và tính chất của các phép toán vectơ. Luyện tập thêm sẽ giúp em tiến bộ.'}
+ document.getElementById('rank-title').textContent=rank;document.getElementById('rank-title').style.color=color;
+ const circle=document.getElementById('final-score');circle.textContent=`${score}/10`;circle.style.color=color;circle.style.borderColor=color;
+ document.getElementById('final-percent').textContent=`${percent}%`;document.getElementById('final-wrong').textContent=wrong;
+ document.getElementById('personal-message').textContent=message;document.getElementById('personal-message').style.color=color;
+ document.getElementById('summary-string').textContent=`LỚP: ${sClass.toUpperCase()} | HỌ TÊN: ${sName.toUpperCase()} | CHỦ ĐỀ: CÁC PHÉP TOÁN VECTƠ | KẾT QUẢ: ${score}/10 | XẾP LOẠI: ${rank}`;
+}
+function retryQuiz(){document.getElementById('student-name').value=sName;document.getElementById('student-class').value=sClass;switchScreen('screen-1');document.getElementById('progress-bar').style.width='0%'}
+function captureResult(){
+ const area=document.getElementById('capture-area');
+ if(window.html2canvas){html2canvas(area,{backgroundColor:'#fff',scale:2}).then(canvas=>{const a=document.createElement('a');a.download=`KetQua_CacPhepToanVectơ_${sName.replace(/\s+/g,'')}.png`;a.href=canvas.toDataURL('image/png');a.click()})}
+ else{window.print()}
+}
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body></html>
